@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useLocale } from '../i18n/LocaleContext';
 import { HomeContent } from '../types/content';
 
@@ -53,57 +53,29 @@ export function Layout({ home }: LayoutProps) {
   const { locale, setLocale } = useLocale();
   const location = useLocation();
   const isHomeRoute = location.pathname === '/';
-  const isContactActive = isHomeRoute && location.hash === '#contact';
-
-  const scrollToContact = () => {
-    if (!isHomeRoute) {
-      return;
-    }
-
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
 
   return (
     <div className={`site-shell${isHomeRoute ? ' site-shell-home' : ''}`}>
       <HashScrollManager />
-      <header className={`site-header${isHomeRoute ? ' site-header-home' : ''}`}>
-        <Link to="/" className="site-brand" aria-label={home.navigation.home}>
-          <span className="site-brand-mark">Home</span>
-          <p>{home.badge}</p>
-        </Link>
-        <nav className="site-nav" aria-label="Primary">
-          <NavLink to="/" end className={({ isActive }) => (isActive && !isContactActive ? 'active' : undefined)}>
-            {home.navigation.home}
-          </NavLink>
-          <NavLink to="/life" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            {home.navigation.life}
-          </NavLink>
-          <NavLink to="/research" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            {home.navigation.research}
-          </NavLink>
-          <Link
-            to={{ pathname: '/', hash: '#contact' }}
-            className={isContactActive ? 'active' : undefined}
-            onClick={scrollToContact}
-          >
-            {home.navigation.contact}
-          </Link>
-        </nav>
-        <div className="locale-switch" aria-label="Language switcher">
-          <button type="button" className={locale === 'zh' ? 'active' : ''} onClick={() => setLocale('zh')}>
-            中文
-          </button>
-          <button type="button" className={locale === 'en' ? 'active' : ''} onClick={() => setLocale('en')}>
-            EN
-          </button>
-        </div>
-      </header>
+      <div
+        className={`locale-switch locale-switch-floating${isHomeRoute ? ' locale-switch-home' : ''}`}
+        aria-label="Language switcher"
+      >
+        <button type="button" className={locale === 'zh' ? 'active' : ''} onClick={() => setLocale('zh')}>
+          中文
+        </button>
+        <button type="button" className={locale === 'en' ? 'active' : ''} onClick={() => setLocale('en')}>
+          EN
+        </button>
+      </div>
       <main className={`page-frame${isHomeRoute ? ' page-frame-home' : ''}`}>
         <Outlet />
       </main>
-      <footer className={`site-footer${isHomeRoute ? ' site-footer-home' : ''}`}>
-        <p>{home.footerNote}</p>
-      </footer>
+      {!isHomeRoute ? (
+        <footer className="site-footer">
+          <p>{home.footerNote}</p>
+        </footer>
+      ) : null}
     </div>
   );
 }

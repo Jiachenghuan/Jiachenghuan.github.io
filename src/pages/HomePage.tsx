@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import ProfileCard from '../components/ProfileCard';
+import ProfileCard from '../components/ProfileCard.tsx';
 import { PrismBackground } from '../components/PrismBackground';
 import { ContactMethod, LifeCard, ResearchProject, SiteContent } from '../types/content';
 
@@ -68,21 +68,16 @@ function GlassPanel({ content, cta, summary, title, to, type }: GlassPanelProps)
 
 export function HomePage({ siteContent }: HomePageProps) {
   const { home, lifeCards, researchProjects, contacts } = siteContent;
+  const locale = home.navigation.home === '首页' ? 'zh' : 'en';
   const email = contacts.find((contact) => contact.type === 'email');
   const github = contacts.find((contact) => contact.type === 'github');
   const githubHandle = normalizeGithubHandle(github);
   const profileName = deriveProfileName(email, githubHandle);
-
-  const openPrimaryContact = () => {
-    if (email?.href) {
-      window.location.href = email.href;
-      return;
-    }
-
-    if (github?.href) {
-      window.open(github.href, '_blank', 'noopener,noreferrer');
-    }
-  };
+  const contactLine = email?.value || github?.value || (locale === 'zh' ? '联系方式：待补充' : 'Contact: To be added');
+  const profileLines =
+    locale === 'zh'
+      ? ['职位：待补充', '单位：待补充', `联系方式：${contactLine}`]
+      : ['Position: To be added', 'Affiliation: To be added', `Contact: ${contactLine}`];
 
   return (
     <div className="page page-home">
@@ -91,21 +86,15 @@ export function HomePage({ siteContent }: HomePageProps) {
       </div>
 
       <section className="home-layout" aria-label="Homepage overview">
-        <section id="contact" className="home-profile-column fade-in" aria-labelledby="profile-title">
+        <section id="contact" className="home-profile-panel fade-in" aria-labelledby="profile-title">
           <ProfileCard
             avatarUrl="/assets/profile-avatar.svg"
-            miniAvatarUrl="/assets/profile-avatar.svg"
-            behindGlowColor="rgba(126, 184, 255, 0.58)"
-            behindGlowSize="58%"
             className="home-profile-card"
-            contactText={email ? home.actions.sendEmail : home.actions.openLink}
             enableMobileTilt
             enableTilt
-            handle={githubHandle}
+            innerGradient="linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02))"
             name={profileName}
-            onContactClick={openPrimaryContact}
-            status={home.stats.contact}
-            title={home.badge}
+            profileLines={profileLines}
           />
           <h1 id="profile-title" className="sr-only">
             Profile
