@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useLocalizedSiteContent } from './content/siteContent';
 import { Layout } from './components/Layout';
 import { LocaleProvider } from './i18n/LocaleContext';
-import { ContactPage } from './pages/ContactPage';
 import { HomePage } from './pages/HomePage';
 import { LifePage } from './pages/LifePage';
 import { ResearchPage } from './pages/ResearchPage';
@@ -19,7 +18,7 @@ function AppRoutes() {
           path="/research"
           element={<ResearchPage content={siteContent.researchProjects} home={siteContent.home} />}
         />
-        <Route path="/contact" element={<ContactPage content={siteContent.contacts} home={siteContent.home} />} />
+        <Route path="/contact" element={<Navigate to={{ pathname: '/', hash: '#contact' }} replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
