@@ -5,3 +5,5 @@ coverage/
 .vite/
 .npm-cache/
 *.tsbuildinfo
+
+gcm-diagnose.log
