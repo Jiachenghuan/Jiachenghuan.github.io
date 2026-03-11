@@ -18,6 +18,8 @@ concurrency:
 
 jobs:
   build:
+    outputs:
+      artifact_name: ${{ steps.pages-artifact-meta.outputs.artifact_name }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -38,9 +40,14 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Prepare artifact metadata
+        id: pages-artifact-meta
+        run: echo "artifact_name=github-pages-${{ github.run_id }}-${{ github.run_attempt }}" >> "$GITHUB_OUTPUT"
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          name: ${{ steps.pages-artifact-meta.outputs.artifact_name }}
           path: ./dist
 
   deploy:
@@ -53,3 +60,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: ${{ needs.build.outputs.artifact_name }}
