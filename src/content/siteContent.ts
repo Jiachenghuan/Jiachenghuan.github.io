@@ -6,7 +6,7 @@ const siteContentByLocale: Record<Locale, SiteContent> = {
     home: {
       badge: 'Personal Website',
       title: '把生活、研究与联系渠道放在同一张首页里。',
-      lead: 'Home 是一个用于长期展示个人轨迹的 GitHub Pages 站点。',
+      lead: 'Home 是一个通过 GitHub Actions 自动部署到 GitHub Pages 的个人站点，用于长期展示个人轨迹。',
       intro:
         '这里既可以放松地记录生活观察，也能清晰地介绍研究项目，并保留简洁直接的联系方式。当前内容为示例数据，结构已经按后续真实资料替换做好。',
       navigation: {
@@ -44,7 +44,7 @@ const siteContentByLocale: Record<Locale, SiteContent> = {
           cta: '查看联系方式',
         },
       },
-      footerNote: 'Built for GitHub Pages with bilingual content switching.',
+      footerNote: '通过 GitHub Actions 部署到 GitHub Pages，并支持中英文切换。',
     },
     lifeCards: [
       {
@@ -131,7 +131,7 @@ const siteContentByLocale: Record<Locale, SiteContent> = {
     home: {
       badge: 'Personal Website',
       title: 'One place for life notes, research work, and contact details.',
-      lead: 'Home is a GitHub Pages site for presenting a long-term personal profile.',
+      lead: 'Home is a personal site deployed to GitHub Pages via GitHub Actions for presenting a long-term profile.',
       intro:
         'It is designed to hold everyday observations, academic projects, and direct contact channels in one coherent space. The current copy is seeded with placeholder content, but the structure is ready for real material.',
       navigation: {
@@ -169,7 +169,7 @@ const siteContentByLocale: Record<Locale, SiteContent> = {
           cta: 'Open the contact page',
         },
       },
-      footerNote: 'Built for GitHub Pages with bilingual content switching.',
+      footerNote: 'Deployed to GitHub Pages via GitHub Actions with bilingual content switching.',
     },
     lifeCards: [
       {

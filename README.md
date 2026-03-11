@@ -1,6 +1,6 @@
 # Home
 
-Personal website built with React, TypeScript, and Vite for GitHub Pages.
+Personal website built with React, TypeScript, and Vite, deployed to GitHub Pages via GitHub Actions.
 
 ## Development
 
