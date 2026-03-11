@@ -1,0 +1,8 @@
+<svg width="1200" height="780" viewBox="0 0 1200 780" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="780" fill="#E8EEF1"/>
+  <rect x="90" y="90" width="1020" height="600" rx="38" fill="#F8FBFC"/>
+  <path d="M170 520L390 280L560 430L760 220L1010 520" stroke="#223042" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="320" cy="230" r="74" fill="#D06C4B"/>
+  <rect x="180" y="565" width="840" height="24" rx="12" fill="#223042" fill-opacity="0.16"/>
+  <text x="140" y="182" fill="#223042" font-family="Georgia, serif" font-size="72">Field Walks &amp; City Edges</text>
+</svg>
