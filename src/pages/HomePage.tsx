@@ -1,87 +1,38 @@
 import { Link } from 'react-router-dom';
+import ProfileCard from '../components/ProfileCard';
 import { PrismBackground } from '../components/PrismBackground';
-import { ContactMethod, HomeContent, LifeCard, ResearchProject, SiteContent } from '../types/content';
+import { ContactMethod, LifeCard, ResearchProject, SiteContent } from '../types/content';
 
 interface HomePageProps {
   siteContent: SiteContent;
 }
 
-interface ProfileCardPanelProps {
-  contacts: ContactMethod[];
-  home: HomeContent;
-}
+const titleCase = (value: string) =>
+  value
+    .split(/[._\-\s]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
 
-function ProfileCardPanel({ contacts, home }: ProfileCardPanelProps) {
-  const email = contacts.find((contact) => contact.type === 'email');
-  const github = contacts.find((contact) => contact.type === 'github');
-  const wechat = contacts.find((contact) => contact.type === 'wechat');
-  const githubHandle = github?.value.replace(/^https?:\/\/github\.com\//, '').replace(/^github\.com\//, '') || 'profile';
+const normalizeGithubHandle = (contact?: ContactMethod) => {
+  if (!contact?.value) {
+    return 'profile';
+  }
 
-  return (
-    <section id="contact" className="home-profile-column fade-in" aria-labelledby="profile-title">
-      <div className="profile-card-wrapper">
-        <div className="profile-card-glow" aria-hidden="true" />
-        <div className="profile-card-shell">
-          <article className="profile-card-surface">
-            <div className="profile-card-shine" aria-hidden="true" />
-            <div className="profile-card-glare" aria-hidden="true" />
+  return contact.value.replace(/^https?:\/\/github\.com\//, '').replace(/^github\.com\//, '').replace(/^@/, '') || 'profile';
+};
 
-            <div className="profile-card-main">
-              <div className="profile-card-topline">{home.badge}</div>
+const deriveProfileName = (email?: ContactMethod, githubHandle?: string) => {
+  if (email?.value && !email.value.startsWith('your.name@')) {
+    return titleCase(email.value.split('@')[0]);
+  }
 
-              <div className="profile-card-art" aria-hidden="true">
-                <div className="profile-card-orb">
-                  <span>{home.navigation.home.slice(0, 1)}</span>
-                </div>
-              </div>
+  if (githubHandle && githubHandle !== 'your-handle' && githubHandle !== 'profile') {
+    return titleCase(githubHandle);
+  }
 
-              <div className="profile-card-heading">
-                <h1 id="profile-title">Profile</h1>
-                <p>{home.lead}</p>
-              </div>
-
-              <div className="profile-contact-list">
-                {email ? (
-                  <a href={email.href} className="profile-contact-item">
-                    <span className="profile-contact-label">{email.label}</span>
-                    <strong>{email.value}</strong>
-                  </a>
-                ) : null}
-                {github ? (
-                  <a href={github.href} className="profile-contact-item" target="_blank" rel="noreferrer">
-                    <span className="profile-contact-label">{github.label}</span>
-                    <strong>{githubHandle}</strong>
-                  </a>
-                ) : null}
-                {wechat ? (
-                  <div className="profile-contact-item">
-                    <span className="profile-contact-label">{wechat.label}</span>
-                    <strong>{home.actions.wechatQr}</strong>
-                  </div>
-                ) : null}
-              </div>
-
-              <div className="profile-user-bar">
-                <div className="profile-user-meta">
-                  <div className="profile-mini-avatar">{home.navigation.home.slice(0, 1)}</div>
-                  <div className="profile-user-text">
-                    <span className="profile-user-handle">@{githubHandle}</span>
-                    <span className="profile-user-status">{home.navigation.contact}</span>
-                  </div>
-                </div>
-                {email ? (
-                  <a href={email.href} className="profile-contact-button">
-                    {home.actions.sendEmail}
-                  </a>
-                ) : null}
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-  );
-}
+  return 'Your Name';
+};
 
 interface GlassPanelProps {
   content: LifeCard[] | ResearchProject[];
@@ -93,7 +44,7 @@ interface GlassPanelProps {
 }
 
 function GlassPanel({ content, cta, summary, title, to, type }: GlassPanelProps) {
-  const previewItems = content.slice(0, 2).map((item) => ('date' in item ? item.title : item.title));
+  const previewItems = content.slice(0, 2).map((item) => item.title);
 
   return (
     <Link to={to} className={`glass-panel glass-panel-${type} fade-in${type === 'research' ? ' stagger-1' : ''}`}>
@@ -117,6 +68,21 @@ function GlassPanel({ content, cta, summary, title, to, type }: GlassPanelProps)
 
 export function HomePage({ siteContent }: HomePageProps) {
   const { home, lifeCards, researchProjects, contacts } = siteContent;
+  const email = contacts.find((contact) => contact.type === 'email');
+  const github = contacts.find((contact) => contact.type === 'github');
+  const githubHandle = normalizeGithubHandle(github);
+  const profileName = deriveProfileName(email, githubHandle);
+
+  const openPrimaryContact = () => {
+    if (email?.href) {
+      window.location.href = email.href;
+      return;
+    }
+
+    if (github?.href) {
+      window.open(github.href, '_blank', 'noopener,noreferrer');
+    }
+  };
 
   return (
     <div className="page page-home">
@@ -125,7 +91,27 @@ export function HomePage({ siteContent }: HomePageProps) {
       </div>
 
       <section className="home-layout" aria-label="Homepage overview">
-        <ProfileCardPanel contacts={contacts} home={home} />
+        <section id="contact" className="home-profile-column fade-in" aria-labelledby="profile-title">
+          <ProfileCard
+            avatarUrl="/assets/profile-avatar.svg"
+            miniAvatarUrl="/assets/profile-avatar.svg"
+            behindGlowColor="rgba(126, 184, 255, 0.58)"
+            behindGlowSize="58%"
+            className="home-profile-card"
+            contactText={email ? home.actions.sendEmail : home.actions.openLink}
+            enableMobileTilt
+            enableTilt
+            handle={githubHandle}
+            name={profileName}
+            onContactClick={openPrimaryContact}
+            status={home.stats.contact}
+            title={home.badge}
+          />
+          <h1 id="profile-title" className="sr-only">
+            Profile
+          </h1>
+        </section>
+
         <GlassPanel
           content={lifeCards}
           cta={home.previews.life.cta}

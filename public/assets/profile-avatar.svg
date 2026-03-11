@@ -1,0 +1,27 @@
+<svg width="640" height="960" viewBox="0 0 640 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="960" rx="48" fill="url(#bg)"/>
+  <circle cx="320" cy="300" r="142" fill="url(#headGlow)" fill-opacity="0.55"/>
+  <path d="M320 444C402.843 444 470 376.843 470 294C470 211.157 402.843 144 320 144C237.157 144 170 211.157 170 294C170 376.843 237.157 444 320 444Z" fill="url(#head)"/>
+  <path d="M107 873C107 703.473 244.473 566 414 566H226C395.527 566 533 703.473 533 873V912H107V873Z" fill="url(#body)"/>
+  <circle cx="258" cy="266" r="16" fill="#F7FBFF" fill-opacity="0.55"/>
+  <circle cx="222" cy="316" r="10" fill="#B8CCFF" fill-opacity="0.75"/>
+  <defs>
+    <linearGradient id="bg" x1="86" y1="82" x2="566" y2="904" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0E1533"/>
+      <stop offset="0.48" stop-color="#232D63"/>
+      <stop offset="1" stop-color="#0B1024"/>
+    </linearGradient>
+    <radialGradient id="headGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(320 300) rotate(90) scale(142)">
+      <stop stop-color="#DCE8FF"/>
+      <stop offset="1" stop-color="#DCE8FF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="head" x1="196" y1="166" x2="432" y2="432" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7FAFF"/>
+      <stop offset="1" stop-color="#8CA8FF"/>
+    </linearGradient>
+    <linearGradient id="body" x1="140" y1="602" x2="492" y2="924" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9CB5FF"/>
+      <stop offset="1" stop-color="#4257A8"/>
+    </linearGradient>
+  </defs>
+</svg>
