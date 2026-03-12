@@ -152,9 +152,6 @@ export function LifeFlowPanel({ content, home }: LifeFlowPanelProps) {
                 <span key={item}>{item}</span>
               ))}
             </div>
-            <Link to="/life" className="glass-panel-cta" onClick={(event) => event.stopPropagation()}>
-              {home.previews.life.cta}
-            </Link>
           </div>
         </div>
       </div>

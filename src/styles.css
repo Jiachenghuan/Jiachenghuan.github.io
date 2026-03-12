@@ -763,7 +763,9 @@ img {
   display: grid;
   align-content: center;
   padding: 28px 30px;
-  background: linear-gradient(180deg, rgba(4, 8, 20, 0.82), rgba(6, 12, 23, 0.96));
+  background: rgba(10, 14, 25, 0.45);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
   opacity: 0;
   pointer-events: none;
   transform: scale(0.985);
