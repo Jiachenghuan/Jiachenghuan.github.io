@@ -1,0 +1,80 @@
+:root {
+  --ifm-background-color: #0f1115;
+  --ifm-background-surface-color: #14171d;
+  --ifm-color-content: #e9dfd2;
+  --ifm-color-content-secondary: rgba(214, 204, 191, 0.74);
+  --ifm-color-primary: #e2c389;
+  --ifm-color-primary-dark: #d7b46a;
+  --ifm-color-primary-darker: #d2ab5b;
+  --ifm-color-primary-darkest: #b68f37;
+  --ifm-color-primary-light: #e7cd9f;
+  --ifm-color-primary-lighter: #ead5ad;
+  --ifm-color-primary-lightest: #f1e1c4;
+  --ifm-font-family-base: 'Aptos', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  --ifm-heading-font-family: 'Palatino Linotype', 'Noto Serif SC', serif;
+  --ifm-code-font-size: 94%;
+  --ifm-link-color: #e9d0a0;
+  --ifm-global-radius: 26px;
+  --ifm-navbar-height: 0px;
+  --ifm-leading: 1.8;
+  --ifm-font-color-base: #ebe2d7;
+  --ifm-font-color-secondary: rgba(214, 204, 191, 0.74);
+  --ifm-toc-border-color: rgba(255, 255, 255, 0.08);
+  --ifm-menu-color: rgba(214, 204, 191, 0.72);
+  --ifm-menu-color-active: rgba(246, 240, 233, 0.96);
+  --ifm-menu-color-background-active: rgba(255, 255, 255, 0.04);
+}
+
+html,
+body,
+#__docusaurus {
+  min-height: 100%;
+}
+
+html[data-theme='dark'] {
+  --ifm-background-color: #0f1115;
+  --ifm-background-surface-color: #14171d;
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.05);
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(212, 171, 91, 0.08), transparent 24%),
+    radial-gradient(circle at 85% 12%, rgba(112, 111, 255, 0.08), transparent 22%),
+    linear-gradient(180deg, #0d0f13 0%, #111319 100%);
+  color: var(--ifm-font-color-base);
+}
+
+.navbar,
+.footer {
+  display: none;
+}
+
+.main-wrapper {
+  background: transparent;
+}
+
+a {
+  text-decoration: none;
+}
+
+.markdown > h2,
+.markdown > h3,
+.markdown > h4 {
+  scroll-margin-top: 36px;
+}
+
+.theme-code-block,
+.prism-code {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+@media (max-width: 720px) {
+  body {
+    background:
+      radial-gradient(circle at top left, rgba(212, 171, 91, 0.07), transparent 28%),
+      linear-gradient(180deg, #0d0f13 0%, #111319 100%);
+  }
+}

@@ -1,0 +1,133 @@
+.homeShell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 72px;
+  width: min(1360px, calc(100% - 80px));
+  margin: 0 auto;
+  padding: 72px 0 96px;
+}
+
+.homeMain {
+  display: grid;
+  gap: 34px;
+}
+
+.homeHero {
+  display: grid;
+  gap: 18px;
+}
+
+.eyebrow {
+  color: rgba(227, 217, 203, 0.58);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: 'Palatino Linotype', 'Noto Serif SC', serif;
+  font-size: clamp(2.6rem, 4vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: rgba(247, 241, 233, 0.96);
+}
+
+.description {
+  max-width: 46rem;
+  margin: 0;
+  font-size: 1.04rem;
+  line-height: 1.8;
+  color: rgba(214, 204, 191, 0.74);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.card {
+  display: grid;
+  gap: 14px;
+  min-height: 240px;
+  padding: 28px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  color: inherit;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: homeRise 620ms ease forwards;
+  animation-delay: calc(var(--card-index) * 100ms);
+  transition: transform 220ms ease, border-color 220ms ease, background-color 220ms ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(233, 208, 160, 0.26);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+}
+
+.cardIndex,
+.cardAction {
+  color: rgba(227, 217, 203, 0.58);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cardTitle {
+  margin: 0;
+  font-family: 'Palatino Linotype', 'Noto Serif SC', serif;
+  font-size: clamp(1.8rem, 2.6vw, 2.6rem);
+  color: rgba(245, 239, 231, 0.95);
+}
+
+.cardDescription {
+  margin: 0;
+  color: rgba(214, 204, 191, 0.74);
+  line-height: 1.8;
+}
+
+.cardAction {
+  margin-top: auto;
+}
+
+@keyframes homeRise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .homeShell {
+    grid-template-columns: 1fr;
+    width: min(100%, calc(100% - 48px));
+    gap: 36px;
+    padding: 48px 0 80px;
+  }
+}
+
+@media (max-width: 720px) {
+  .homeShell {
+    width: min(100%, calc(100% - 32px));
+    padding: 32px 0 56px;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: clamp(2rem, 11vw, 3rem);
+  }
+}

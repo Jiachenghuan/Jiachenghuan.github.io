@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { HomeContent, LifeCard } from '../types/content';
 
 interface LifePageProps {
@@ -12,6 +14,20 @@ const lifeAnchors = [
 ] as const;
 
 export function LifePage({ content, home }: LifePageProps) {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [location]);
+
   return (
     <div className="page page-life">
       <section className="page-hero">

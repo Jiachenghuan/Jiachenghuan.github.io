@@ -1,0 +1,12 @@
+﻿methodology:
+  label: Methodology
+  description: Frameworks for stable learning loops and structured thinking.
+learning-system:
+  label: Learning System
+  description: Reusable practices for long-term accumulation and review.
+course-notes:
+  label: Course Notes
+  description: Structured notes taken from courses and focused study blocks.
+reading-methods:
+  label: Reading Methods
+  description: How reading, annotation, and reuse connect together.

@@ -4,11 +4,11 @@ import {
   useState,
   type CSSProperties,
   type FocusEvent,
-  type KeyboardEvent,
-  type MouseEvent,
   type PointerEvent,
 } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { lifeSections } from '../content/lifeSections';
+import { useLocale } from '../i18n/LocaleContext';
 import { HomeContent, LifeCard } from '../types/content';
 
 interface LifeFlowPanelProps {
@@ -20,43 +20,27 @@ interface FlowMenuItem {
   id: string;
   image: string;
   label: string;
+  path: string;
   subtitle: string;
   title: string;
-  to: string;
 }
 
-const flowMenuBlueprint = [
-  {
-    id: 'learning',
-    label: 'Learning',
-    subtitle: 'Notes, systems, and long-form curiosity.',
-  },
-  {
-    id: 'photography',
-    label: 'Photography',
-    subtitle: 'Framing, walks, and visual observation.',
-  },
-  {
-    id: 'literature-art',
-    label: 'Literature&Art',
-    subtitle: 'Reading, cinema, and aesthetic fragments.',
-  },
-] as const;
-
 export function LifeFlowPanel({ content, home }: LifeFlowPanelProps) {
-  const navigate = useNavigate();
+  const { locale } = useLocale();
   const panelRef = useRef<HTMLDivElement>(null);
   const previewItems = content.slice(0, 2).map((item) => item.title);
   const flowMenuItems = useMemo<FlowMenuItem[]>(
     () =>
-      flowMenuBlueprint.map((item, index) => {
+      lifeSections.map((section, index) => {
         const sourceCard = content[index] ?? content[content.length - 1] ?? content[0];
 
         return {
-          ...item,
-          image: sourceCard?.image ?? '/assets/life-garden.svg',
-          title: sourceCard?.title ?? item.subtitle,
-          to: `/life#${item.id}`,
+          id: section.id,
+          image: sourceCard?.image ?? section.image,
+          label: section.label,
+          path: section.path,
+          subtitle: section.subtitle,
+          title: sourceCard?.title ?? section.subtitle,
         };
       }),
     [content],
@@ -64,6 +48,8 @@ export function LifeFlowPanel({ content, home }: LifeFlowPanelProps) {
   const [activeId, setActiveId] = useState(flowMenuItems[0]?.id ?? '');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const activeItem = flowMenuItems.find((item) => item.id === activeId) ?? flowMenuItems[0];
+  const hoverHint = locale === 'zh' ? '\u60ac\u505c\u540e\u9009\u62e9\u5206\u533a' : 'Hover to choose a section';
+  const openSectionLabel = locale === 'zh' ? '\u6253\u5f00\u5206\u533a' : 'Open section';
 
   const setPreviewPosition = (clientX: number, clientY: number, rect: DOMRect) => {
     if (!panelRef.current) {
@@ -75,27 +61,6 @@ export function LifeFlowPanel({ content, home }: LifeFlowPanelProps) {
 
     panelRef.current.style.setProperty('--life-preview-x', `${x}%`);
     panelRef.current.style.setProperty('--life-preview-y', `${y}%`);
-  };
-
-  const handlePanelClick = (event: MouseEvent<HTMLDivElement>) => {
-    if ((event.target as HTMLElement).closest('a, button')) {
-      return;
-    }
-
-    navigate('/life');
-  };
-
-  const handlePanelKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== 'Enter' && event.key !== ' ') {
-      return;
-    }
-
-    if (event.target !== event.currentTarget) {
-      return;
-    }
-
-    event.preventDefault();
-    navigate('/life');
   };
 
   const handlePanelPointerMove = (event: PointerEvent<HTMLDivElement>) => {
@@ -123,13 +88,11 @@ export function LifeFlowPanel({ content, home }: LifeFlowPanelProps) {
     <div
       ref={panelRef}
       className="glass-panel glass-panel-life life-flow-panel fade-in"
-      role="link"
+      role="group"
       tabIndex={0}
-      aria-label={home.previews.life.cta}
+      aria-label={home.previews.life.title}
       onBlur={handlePanelBlur}
-      onClick={handlePanelClick}
       onFocus={handlePanelFocus}
-      onKeyDown={handlePanelKeyDown}
       onMouseEnter={() => {
         setIsMenuOpen(true);
         setActiveId(flowMenuItems[0]?.id ?? '');
@@ -152,6 +115,14 @@ export function LifeFlowPanel({ content, home }: LifeFlowPanelProps) {
                 <span key={item}>{item}</span>
               ))}
             </div>
+            <span className="glass-panel-cta life-flow-hint">{hoverHint}</span>
+          </div>
+          <div className="life-flow-mobile-links">
+            {flowMenuItems.map((item) => (
+              <Link key={item.id} to={item.path}>
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
@@ -176,9 +147,8 @@ export function LifeFlowPanel({ content, home }: LifeFlowPanelProps) {
             return (
               <Link
                 key={item.id}
-                to={item.to}
+                to={item.path}
                 className={`life-flow-item${isActive ? ' is-active' : ''}`}
-                onClick={(event) => event.stopPropagation()}
                 onFocus={() => {
                   setIsMenuOpen(true);
                   setActiveId(item.id);
@@ -196,7 +166,7 @@ export function LifeFlowPanel({ content, home }: LifeFlowPanelProps) {
                   <span className="life-flow-item-title">{item.label}</span>
                   <span className="life-flow-item-meta">{item.subtitle}</span>
                 </div>
-                <span className="life-flow-action">Open section</span>
+                <span className="life-flow-action">{openSectionLabel}</span>
               </Link>
             );
           })}
