@@ -5,6 +5,12 @@ interface LifePageProps {
   home: HomeContent;
 }
 
+const lifeAnchors = [
+  { id: 'learning', label: 'Learning' },
+  { id: 'photography', label: 'Photography' },
+  { id: 'literature-art', label: 'Literature&Art' },
+] as const;
+
 export function LifePage({ content, home }: LifePageProps) {
   return (
     <div className="page page-life">
@@ -15,9 +21,10 @@ export function LifePage({ content, home }: LifePageProps) {
       </section>
       <section className="life-grid">
         {content.map((card, index) => (
-          <article className={`life-card fade-in stagger-${index % 3}`} key={card.id}>
+          <article id={lifeAnchors[index]?.id} className={`life-card fade-in stagger-${index % 3}`} key={card.id}>
             <img src={card.image} alt={card.title} className="life-card-image" />
             <div className="life-card-body">
+              {lifeAnchors[index] ? <span className="life-card-category">{lifeAnchors[index].label}</span> : null}
               <div className="meta-row">
                 <h2>{card.title}</h2>
                 <span>{card.date}</span>

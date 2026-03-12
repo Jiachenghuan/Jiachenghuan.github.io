@@ -11,10 +11,6 @@ function HashScrollManager() {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.pathname !== '/') {
-      return;
-    }
-
     if (!location.hash) {
       window.scrollTo(0, 0);
       return;
@@ -79,3 +75,4 @@ export function Layout({ home }: LayoutProps) {
     </div>
   );
 }
+

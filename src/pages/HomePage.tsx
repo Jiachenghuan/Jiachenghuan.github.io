@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
+import { LifeFlowPanel } from '../components/LifeFlowPanel';
 import ProfileCard from '../components/ProfileCard.tsx';
 import { PrismBackground } from '../components/PrismBackground';
+import { useLocale } from '../i18n/LocaleContext';
 import { ContactMethod, LifeCard, ResearchProject, SiteContent } from '../types/content';
 
 interface HomePageProps {
@@ -67,16 +69,21 @@ function GlassPanel({ content, cta, summary, title, to, type }: GlassPanelProps)
 }
 
 export function HomePage({ siteContent }: HomePageProps) {
+  const { locale } = useLocale();
   const { home, lifeCards, researchProjects, contacts } = siteContent;
-  const locale = home.navigation.home === '首页' ? 'zh' : 'en';
   const email = contacts.find((contact) => contact.type === 'email');
   const github = contacts.find((contact) => contact.type === 'github');
   const githubHandle = normalizeGithubHandle(github);
   const profileName = deriveProfileName(email, githubHandle);
-  const contactLine = email?.value || github?.value || (locale === 'zh' ? '联系方式：待补充' : 'Contact: To be added');
+  const contactLine =
+    email?.value || github?.value || (locale === 'zh' ? '\u8054\u7cfb\u65b9\u5f0f\uff1a\u5f85\u8865\u5145' : 'Contact: To be added');
   const profileLines =
     locale === 'zh'
-      ? ['职位：待补充', '单位：待补充', `联系方式：${contactLine}`]
+      ? [
+          '\u804c\u4f4d\uff1a\u5f85\u8865\u5145',
+          '\u5355\u4f4d\uff1a\u5f85\u8865\u5145',
+          `\u8054\u7cfb\u65b9\u5f0f\uff1a${contactLine}`,
+        ]
       : ['Position: To be added', 'Affiliation: To be added', `Contact: ${contactLine}`];
 
   return (
@@ -101,14 +108,7 @@ export function HomePage({ siteContent }: HomePageProps) {
           </h1>
         </section>
 
-        <GlassPanel
-          content={lifeCards}
-          cta={home.previews.life.cta}
-          summary={home.previews.life.summary}
-          title={home.previews.life.title}
-          to="/life"
-          type="life"
-        />
+        <LifeFlowPanel content={lifeCards} home={home} />
         <GlassPanel
           content={researchProjects}
           cta={home.previews.research.cta}
