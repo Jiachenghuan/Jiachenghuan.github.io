@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
-import { LifeFlowPanel } from '../components/LifeFlowPanel';
+﻿import {Link} from 'react-router-dom';
+import {LifeFlowPanel} from '../components/LifeFlowPanel';
 import ProfileCard from '../components/ProfileCard.tsx';
-import { PrismBackground } from '../components/PrismBackground';
-import { useLocale } from '../i18n/LocaleContext';
-import { ContactMethod, LifeCard, ResearchProject, SiteContent } from '../types/content';
+import {PrismBackground} from '../components/PrismBackground';
+import {useLocale} from '../i18n/LocaleContext';
+import {ContactMethod, LifeCard, Locale, ResearchProject, SiteContent} from '../types/content';
 
 interface HomePageProps {
   siteContent: SiteContent;
@@ -39,20 +39,61 @@ const deriveProfileName = (email?: ContactMethod, githubHandle?: string) => {
 interface GlassPanelProps {
   content: LifeCard[] | ResearchProject[];
   cta: string;
+  locale: Locale;
   summary: string;
   title: string;
   to: string;
   type: 'life' | 'research';
 }
 
-function GlassPanel({ content, cta, summary, title, to, type }: GlassPanelProps) {
+function GlassPanel({content, cta, locale, summary, title, to, type}: GlassPanelProps) {
   const previewItems = content.slice(0, 2).map((item) => item.title);
+  const researchMetrics =
+    type === 'research'
+      ? (() => {
+          const researchContent = content as ResearchProject[];
+          const years = researchContent.map((item) => Number(item.year)).filter((value) => Number.isFinite(value));
+          const yearRange = years.length ? `${Math.min(...years)}-${Math.max(...years)}` : '--';
+          const keywordCount = new Set(researchContent.flatMap((item) => item.keywords)).size;
+
+          return {
+            indexLabel: locale === 'zh' ? '\u7814\u7a76\u7d22\u5f15' : 'Research Index',
+            keywordCount: String(keywordCount).padStart(2, '0'),
+            keywordLabel: locale === 'zh' ? '\u5173\u952e\u8bcd' : 'Keywords',
+            projectCount: String(researchContent.length).padStart(2, '0'),
+            projectLabel: locale === 'zh' ? '\u9879\u76ee' : 'Projects',
+            yearRange,
+          };
+        })()
+      : null;
 
   return (
     <Link to={to} className={`glass-panel glass-panel-${type} fade-in${type === 'research' ? ' stagger-1' : ''}`}>
       <div className="glass-panel-center">
         <h2>{title}</h2>
       </div>
+      {type === 'research' && researchMetrics ? (
+        <div className="glass-panel-research-accent" aria-hidden="true">
+          <span className="glass-panel-research-kicker">{researchMetrics.indexLabel}</span>
+          <div className="glass-panel-research-stats">
+            <div>
+              <span>{researchMetrics.projectLabel}</span>
+              <strong>{researchMetrics.projectCount}</strong>
+            </div>
+            <div>
+              <span>{researchMetrics.keywordLabel}</span>
+              <strong>{researchMetrics.keywordCount}</strong>
+            </div>
+          </div>
+          <div className="glass-panel-research-chart">
+            <span />
+            <span />
+            <span />
+            <i className="glass-panel-research-scan" />
+          </div>
+          <span className="glass-panel-research-years">{researchMetrics.yearRange}</span>
+        </div>
+      ) : null}
       <div className="glass-panel-footer">
         <p>{summary}</p>
         <div className="glass-panel-meta">
@@ -68,9 +109,9 @@ function GlassPanel({ content, cta, summary, title, to, type }: GlassPanelProps)
   );
 }
 
-export function HomePage({ siteContent }: HomePageProps) {
-  const { locale } = useLocale();
-  const { home, lifeCards, researchProjects, contacts } = siteContent;
+export function HomePage({siteContent}: HomePageProps) {
+  const {locale} = useLocale();
+  const {home, lifeCards, researchProjects, contacts} = siteContent;
   const email = contacts.find((contact) => contact.type === 'email');
   const github = contacts.find((contact) => contact.type === 'github');
   const githubHandle = normalizeGithubHandle(github);
@@ -112,6 +153,7 @@ export function HomePage({ siteContent }: HomePageProps) {
         <GlassPanel
           content={researchProjects}
           cta={home.previews.research.cta}
+          locale={locale}
           summary={home.previews.research.summary}
           title={home.previews.research.title}
           to="/research"

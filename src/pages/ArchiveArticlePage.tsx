@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+﻿import {useEffect, useMemo, useState} from 'react';
 import {Link, Navigate, useParams} from 'react-router-dom';
 import {
   getArchivePost,
@@ -7,11 +7,15 @@ import {
   type ArchivePostSection,
   type ArchiveSectionId,
 } from '../content/archiveContent';
-import {useLocale} from '../i18n/LocaleContext';
 
 interface ArchiveArticlePageProps {
   sectionId: ArchiveSectionId;
 }
+
+const archiveLocale = 'zh' as const;
+const archiveSectionUnit = '\u4e2a\u7ae0\u8282';
+const archiveCuriousLabel = '\u4fdd\u6301\u597d\u5947';
+const archiveAboutLabel = '\u5173\u4e8e';
 
 function flattenSections(sections: ArchivePostSection[]): ArchivePostSection[] {
   return sections.flatMap((section) => [section, ...(section.children ? flattenSections(section.children) : [])]);
@@ -57,11 +61,10 @@ function renderSections(sections: ArchivePostSection[], depth = 2) {
 }
 
 export function ArchiveArticlePage({sectionId}: ArchiveArticlePageProps) {
-  const {locale} = useLocale();
   const {slug} = useParams();
-  const content = getArchiveSectionContent(sectionId, locale);
+  const content = getArchiveSectionContent(sectionId, archiveLocale);
   const post = slug ? getArchivePost(sectionId, slug) : undefined;
-  const sectionLinks = getArchiveSections(locale);
+  const sectionLinks = getArchiveSections(archiveLocale);
   const outlineSections = useMemo(() => (post ? flattenSections(post.sections) : []), [post]);
   const [activeHeading, setActiveHeading] = useState(outlineSections[0]?.id ?? '');
 
@@ -136,8 +139,8 @@ export function ArchiveArticlePage({sectionId}: ArchiveArticlePageProps) {
             <h1>{post.title}</h1>
             <div className="archive-article-meta">
               <span>{post.date}</span>
-              <span>{locale === 'zh' ? `${post.readMinutes} min` : `${post.readMinutes} min read`}</span>
-              <span>{totalSections} {locale === 'zh' ? '\u4e2a\u7ae0\u8282' : 'sections'}</span>
+              <span>{post.readMinutes} min</span>
+              <span>{totalSections} {archiveSectionUnit}</span>
             </div>
             <p>{post.description}</p>
           </header>
@@ -150,14 +153,14 @@ export function ArchiveArticlePage({sectionId}: ArchiveArticlePageProps) {
             <Link to="/" className="archive-brand">
               {content.ui.brandTitle}
             </Link>
-            <p>{locale === 'zh' ? '\u4fdd\u6301\u597d\u5947' : 'stay curious'}</p>
+            <p>{archiveCuriousLabel}</p>
           </div>
 
           <div className="archive-rail-footer fade-in stagger-1">
             <nav className="archive-side-menu">
               <Link to={content.path} className="active">{content.ui.articleLabel}</Link>
               <span>{content.ui.outlineLabel}</span>
-              <Link to="/">{locale === 'zh' ? '\u5173\u4e8e' : 'About'}</Link>
+              <Link to="/">{archiveAboutLabel}</Link>
             </nav>
 
             <nav className="archive-section-links">

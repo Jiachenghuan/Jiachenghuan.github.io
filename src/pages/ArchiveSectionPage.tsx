@@ -1,16 +1,21 @@
-import {useMemo, useState, type CSSProperties} from 'react';
+﻿import {useMemo, useState, type CSSProperties} from 'react';
 import {Link} from 'react-router-dom';
 import {getArchiveSectionContent, getArchiveSections, type ArchiveSectionId} from '../content/archiveContent';
-import {useLocale} from '../i18n/LocaleContext';
 
 interface ArchiveSectionPageProps {
   sectionId: ArchiveSectionId;
 }
 
+const archiveLocale = 'zh' as const;
+const archiveArticleUnit = '\u7bc7\u6587\u7ae0';
+const archiveCuriousLabel = '\u4fdd\u6301\u597d\u5947';
+const archiveAboutLabel = '\u5173\u4e8e';
+const archiveResearchLabel = '\u7814\u7a76';
+const archiveContactLabel = '\u8054\u7cfb';
+
 export function ArchiveSectionPage({sectionId}: ArchiveSectionPageProps) {
-  const {locale} = useLocale();
-  const content = getArchiveSectionContent(sectionId, locale);
-  const sectionLinks = getArchiveSections(locale);
+  const content = getArchiveSectionContent(sectionId, archiveLocale);
+  const sectionLinks = getArchiveSections(archiveLocale);
   const [query, setQuery] = useState('');
   const [activeTag, setActiveTag] = useState('');
 
@@ -68,7 +73,7 @@ export function ArchiveSectionPage({sectionId}: ArchiveSectionPageProps) {
             </div>
 
             <p className="archive-results" aria-live="polite">
-              {content.ui.resultsLabel} {filteredPosts.length} {locale === 'zh' ? '\u7bc7\u6587\u7ae0' : 'articles'}
+              {content.ui.resultsLabel} {filteredPosts.length} {archiveArticleUnit}
               {activeTag ? ` | ${content.ui.tagLabel}: ${activeTag}` : ''}
               {normalizedQuery ? ` | ${content.ui.searchSummaryLabel}: ${query}` : ''}
             </p>
@@ -104,14 +109,14 @@ export function ArchiveSectionPage({sectionId}: ArchiveSectionPageProps) {
             <Link to="/" className="archive-brand">
               {content.ui.brandTitle}
             </Link>
-            <p>{locale === 'zh' ? '\u4fdd\u6301\u597d\u5947' : 'stay curious'}</p>
+            <p>{archiveCuriousLabel}</p>
           </div>
 
           <div className="archive-rail-footer fade-in stagger-1">
             <nav className="archive-side-menu">
               <a href="#archive-list-top" className="active">{content.ui.articleLabel}</a>
               <a href="#archive-tag-filters">{content.ui.tagLabel}</a>
-              <Link to="/">{locale === 'zh' ? '\u5173\u4e8e' : 'About'}</Link>
+              <Link to="/">{archiveAboutLabel}</Link>
             </nav>
 
             <nav className="archive-section-links">
@@ -128,9 +133,9 @@ export function ArchiveSectionPage({sectionId}: ArchiveSectionPageProps) {
             <div className="archive-mini-footer">
               <p>{content.railNote}</p>
               <p>
-                <Link to="/research">{locale === 'zh' ? '\u7814\u7a76' : 'Research'}</Link>
+                <Link to="/research">{archiveResearchLabel}</Link>
                 <span> / </span>
-                <Link to="/contact">{locale === 'zh' ? '\u8054\u7cfb' : 'Contact'}</Link>
+                <Link to="/contact">{archiveContactLabel}</Link>
                 <span> / </span>
                 <Link to="/">{content.ui.homeLabel}</Link>
               </p>
